@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SETS / 计组
 
-## Getting Started
+Gym-floor set counter. Type the lift, set reps or hold time, tap to log a set. Rest countdown starts automatically. Data stays in the browser.
 
-First, run the development server:
+Live: [sets.distinctive.fun](https://sets.distinctive.fun)
+
+## Use
+
+1. Enter an exercise, or pick a preset.
+2. Set reps per set, or switch to **Hold** for planks and other timed work.
+3. Set seconds: rest after a reps set, or hold length in timed mode.
+4. Tap **Log set**. The app counts sets, volume (`sets × reps`), and session time.
+5. Skip rest if you are ready early. Undo the last set if you mis-tapped.
+
+Language follows the device (`zh*` → Chinese, otherwise English). English is the default when no language info is available. The EN / 中 toggle is stored locally.
+
+## Stack
+
+- Next.js static export (`output: "export"`)
+- Cloudflare Pages
+- GitHub Actions via `wrangler pages deploy`
+- Cloudflare Web Analytics
+
+## Local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+pnpm build
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Static files land in `out/`.
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Push to `main`. The workflow builds and deploys to the `set-counter` Pages project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Required GitHub Actions secrets:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `CLOUDFLARE_API_TOKEN` — Account / Cloudflare Pages / Edit
+- `CLOUDFLARE_ACCOUNT_ID` — `d68615c4b79a81e7cf83dff92d97560a`
+- `NEXT_PUBLIC_CF_BEACON_TOKEN` — optional; used if auto-injection is off
 
-## Deploy on Vercel
+Custom domain: `sets.distinctive.fun`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```txt
+Type    Name    Content                  Proxy
+CNAME   sets    set-counter.pages.dev    orange cloud
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you have a token with Zone DNS Edit and Account RUM Edit:
+
+```bash
+CLOUDFLARE_API_TOKEN=... node scripts/setup-cloudflare.mjs
+```
